@@ -1,0 +1,19 @@
+<%= render 'boarding/searchbar' %>
+<%= render 'boarding/board' %>
+<%= render 'boarding/misc' %>
+<%= render 'boarding/background' %>
+<script>
+  $( document ).ready(function()
+  {
+    if ('-webkit-backdrop-filter' in document.body.style)
+    {
+      $('.ui.card.fluid').css("-webkit-backdrop-filter", "blur(3px)");
+      $('.ui.card.fluid').css("background", "rgba(255,255,255,0.1)");
+      $('.ui.menu.large.borderless.top.fixed').css("-webkit-backdrop-filter", "blur(3px)");
+      $('.ui.menu.large.borderless.top.fixed').css("background", "rgba(255,255,255,0.1)");
+    }
+  });
+</script>
+<% if @board.nil? %>
+    redirect_to boarding_url
+<% end %>

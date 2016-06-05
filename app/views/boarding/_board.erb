@@ -1,0 +1,72 @@
+<script src="https://npmcdn.com/masonry-layout@4.1/dist/masonry.pkgd.min.js"></script>
+
+<div class="ui" style="padding-top: 5em;padding-bottom: 2em;">
+  <div id="boardgrid" class="ui grid doubling six column" style="margin: 0 auto;">
+    <% @board.categories.all.each_with_index do |category,index| %>
+        <div class="ui boardgridcell column">
+          <%= render :partial => "category/categorycard", :locals => {:category => category,:categoryindex => index,:boardindex => @boardindex,:board => @board} %>
+        </div>
+    <% end %>
+    <script>
+      $('.categorycard.dropdown')
+          .dropdown({
+            // you can use any ui transition
+            transition: 'fade',
+            action: function() {
+              // nothing built in occurs
+            },
+          })
+      ;
+
+      $('.sitecell .dropdown')
+          .dropdown({
+            action: 'hide'
+          })
+      ;
+      $('#boardgrid').masonry({
+        // options...
+        itemSelector: '.ui.boardgridcell.column',
+        gutter: 0,
+      });
+    </script>
+  </div>
+</div>
+
+<script type="text/javascript">
+  function toggleEditCategoryName(event,contentindex)
+  {
+    if (contentindex == 0)
+    {
+      $(event.target).closest('.content').next().transition('slide down', 200, function() {
+        $('#boardgrid').masonry('layout');
+      })
+      ;
+    }
+    if (contentindex == 1)
+    {
+      $(event.target).closest('.content').transition('slide down', 200, function() {
+        $('#boardgrid').masonry('layout');
+      })
+      ;
+    }
+  }
+  function toggleAddSite(event,contentindex)
+  {
+    if (contentindex == 0)
+    {
+      $(event.target).closest('.content').next().next().next().transition('slide down', 200, function() {
+        $('#boardgrid').masonry('layout');
+      })
+      ;
+    }
+    if (contentindex == 1)
+    {
+      $(event.target).closest('.content').transition('slide down', 200, function() {
+        $('#boardgrid').masonry('layout');
+      })
+      ;
+    }
+  }
+</script>
+
+

@@ -1,0 +1,136 @@
+<div class="ui menu large borderless top fixed">
+  <div class="item" style="padding: 0.1em"></div>
+
+
+  <div id="dropdownbutton" class="ui floating dropdown browse item button teal" >
+    <%= image_tag("icon.png", class:"ui mini image")%>
+    <div class="dropdown icon"></div>
+  </div>
+  <div id="dropdownbuttonpopup" class="ui popup bottom left transition hidden" style="min-width: 20em;padding: 0.5em">
+
+    <div class="item">
+      <h5 class="ui violet header" style="margin: 0em">
+        Switch Board
+      </h5>
+      <div class="ui basic icon buttons fluid">
+        <% if @boardindex <= 1 %>
+        <% else %>
+            <%= link_to boarding_path(:id => @boardindex - 1) ,class: "ui button" do %>
+              <i class="chevron left icon"></i>
+            <% end %>
+        <% end %>
+        <%= link_to boarding_path(:id => @boardindex) ,class: "ui button" do %>
+            第 <%= @boardindex %> 页
+        <% end %>
+        <% if @boardindex >= @boardtotalnum %>
+        <% else %>
+            <%= link_to boarding_path(:id => @boardindex + 1) ,class: "ui button" do %>
+                <i class="chevron right icon"></i>
+            <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="item">
+      <h5 class="ui violet header" style="margin: 0em">
+        Categories Control
+      </h5>
+      <div class="ui one basic icon buttons fluid">
+        <%= link_to new_boarding_category_path(:boarding_id => @boardindex) ,class: "ui button" do %>
+            <i class="add circle icon icon"></i>
+        <% end %>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="ui item right">
+    <div class="ui category search right aligned">
+      <div class="ui transparent icon input">
+        <input id="searchbarinput" class="prompt" type="text" placeholder="搜索网站..." autofocus>
+        <i class="search link icon"></i>
+      </div>
+      <div id="searchresultsonbar" class="results"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $('.teal.button')
+      .popup({
+        inline   : true,
+        hoverable: true,
+        position : 'bottom left',
+        delay: {
+          show: 0,
+          hide: 400
+        }
+      })
+  ;
+
+  $('.ui.search.category')
+      .search({
+        apiSettings:
+        {
+          url: document.URL.replace(/\/$/, "")+'/search?q={query}',
+          onResponse : function(theresponse) {
+            // here you modify theresponse object,
+            // then you return the modified version.
+            console.log(theresponse);
+//            alert(theresponse);
+          }
+        },
+        fields:
+        {
+          title     : 'title',
+          url       : 'url'
+        },
+        searchDelay:200,
+//        verbose:true,
+//        debug:true,
+//        cache:false,
+        error : {
+          source      : 'Cannot search. No source used, and Semantic API module was not included',
+          noResults   : '没有网站',
+          logging     : 'Error in debug logging, exiting.',
+          noTemplate  : 'A valid template name was not specified.',
+          serverError : 'There was an issue with querying the server.',
+          maxResults  : 'Results must be an array to use maxResults setting',
+          method      : 'The method you called is not defined.'
+        },
+        onResults : function(theresponse) {
+          // here you modify theresponse object,
+          // then you return the modified version.
+          console.log(theresponse);
+        },
+        onResultsOpen : function() {
+          $('#searchresultsonbar').css('width','10em');
+        },
+        onSelect : function(result, response)
+        {
+          document.getElementById('searchbarinput').value = "";
+          var win = window.open(result.url, '_blank');
+          win.focus();
+          return false;
+        }
+      })
+  ;
+
+  $('#searchbarinput').keypress(function()
+  {
+    if (event.which == 13 || event.keyCode == 13)
+    {
+      var googlelink = 'https://www.google.com/#q=' + document.getElementById('searchbarinput').value;
+      var win = window.open(googlelink, '_system');
+      win.focus();
+    }
+  });
+
+</script>
+<script type="text/javascript">
+  window.onload = function(){
+    var text_input = document.getElementById ('searchbarinput');
+    text_input.focus ();
+    text_input.select ();
+  }
+</script>

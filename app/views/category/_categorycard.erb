@@ -1,0 +1,124 @@
+<div class="ui card fluid">
+  <div class="content">
+    <div class="ui right floated configure violet icon">
+
+      <div class="categorycard ui pointing top right dropdown">
+        <i class="wrench icon" style="color: grey"></i>
+        <div class="vertical left menu">
+          <div class="header">
+            Add
+          </div>
+
+          <div class="item" onclick="toggleAddSite(event,0)">
+            Add Website
+          </div>
+          <div class="divider"></div>
+          <% if false %>
+          <div class="header">
+            Move
+          </div>
+          <%= link_to boarding_category_movecategory_path(:boarding_id => boardindex, :category_id => category.attributes['id'],:directionNext => 'false' ),
+                        class: "item" do %>
+              Move Back
+          <% end %>
+          <%= link_to boarding_category_movecategory_path(:boarding_id => boardindex, :category_id => category.attributes['id'],:directionNext => 'true' ),
+                      class: "item" do %>
+              Move Next
+          <% end %>
+          <div class="divider"></div>
+          <% end %>
+          <div class="header">
+            Edit
+          </div>
+          <div class="item" onclick="toggleEditCategoryName(event,0)">
+            Change Name
+          </div>
+          <%= link_to boarding_category_url(:boarding_id => boardindex, :id => category.attributes['id']),
+                      method: :delete,
+                      data: { confirm: 'Are you sure?' } ,class: "item" do %>
+              Delete
+          <% end %>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="header" style="color: #3A009E;"><%= category.title %></div>
+  </div>
+  <div class="content transition hidden">
+
+    <%= form_for category do |f| %>
+        <div class="ui form">
+          <%= f.text_area :title,:class => "field",:style=>"resize:none; outline: none;",:rows => 1 do%>
+              <input type="text" placeholder="Category Name">
+          <% end %>
+          <div class="ui buttons fluid">
+            <div class="ui red basic button" onclick="toggleEditCategoryName(event,1)">取消</div>
+            <%= button_tag(type: "submit", class: "ui green basic button") do %>
+                确定
+            <% end %>
+          </div>
+        </div>
+    <% end %>
+  </div>
+
+  <div class="content">
+    <div class="ui list selection">
+      <% category.sites.all.each_with_index do |site,index| %>
+          <div class="item">
+            <div class="ui sitecell right floated ">
+              <div class="ui dropdown pointing right">
+                <i class="ellipsis horizontal icon"></i>
+                <div class="menu">
+                  <%= link_to category_site_movesite_path(:site_id => site.attributes['id'], :category_id => category.attributes['id'],:boarding_id => @board.attributes['id'],:directionNext => 'false',:method=>:post),
+                              class: "item" do %>
+                      <i class="angle up icon"></i>
+                      Move Up
+                  <% end %>
+                  <%= link_to category_site_movesite_path(:site_id => site.attributes['id'], :category_id => category.attributes['id'],:boarding_id => @board.attributes['id'],:directionNext => 'true',:method=>:post),
+                              class: "item" do %>
+                      <i class="angle down icon"></i>
+                      Move Down
+                  <% end %>
+                  <%= link_to boarding_category_site_path(:category_id => category.attributes['id'],:site_id => site.attributes['id'],:id => site.attributes['id'],:boarding_id => @board.attributes['id']),
+                              method: :delete,
+                              data: { confirm: 'Are you sure?' } ,class: "item" do %>
+                      <i class="trash outline icon"></i>
+                      Delete
+                  <% end %>
+                </div>
+              </div>
+            </div>
+            <div class="content">
+              <%= link_to site.url,target:"_blank",rel: "nofollow",style:"color:#5F6873"  do %>
+                  <%= site.title %>
+              <% end %>
+            </div>
+          </div>
+      <% end %>
+    </div>
+
+  </div>
+
+  <div class="content transition hidden">
+
+    <%= form_for [category,@site],url: category_site_index_path(:category_id=>category.attributes['id']) do |f| %>
+        <div class="ui form">
+          <%= f.text_area :title,:class => "field",:style=>"resize:none; outline: none;",:rows => 1 do%>
+              <input type="text" placeholder="Category Name">
+          <% end %>
+          <%= f.text_area :url,:class => "field",:style=>"resize:none; outline: none;",:rows => 1 do%>
+              <input type="text" placeholder="Category Name">
+          <% end %>
+          <div class="ui buttons fluid">
+            <div class="ui red basic button" onclick="toggleAddSite(event,1)">取消</div>
+            <%= button_tag(type: "submit", class: "ui green basic button") do %>
+                确定
+            <% end %>
+          </div>
+        </div>
+    <% end %>
+  </div>
+
+</div>
+
